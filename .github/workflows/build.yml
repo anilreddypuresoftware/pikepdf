@@ -11,7 +11,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04]
-        platform: [manylinux_x86_64, manylinux_i686] # yet not doing musllinux_x86_64, i686 (dependency issues), manylinux_aarch64 (too expensive)
+        platform: [
+            manylinux_x86_64,
+            manylinux_i686,
+            musllinux_x86_64,
+            manylinux_aarch64,
+          ] # musllinux_i686 ?
 
     steps:
       - uses: actions/checkout@v2
@@ -30,11 +35,11 @@ jobs:
           platforms: all
 
       - name: Build wheels
-        uses: joerick/cibuildwheel@v2.3.1
+        uses: joerick/cibuildwheel@v2.4.0
         if: matrix.platform != 'manylinux_aarch64'
 
       - name: Build wheels (emulated)
-        uses: joerick/cibuildwheel@v2.3.1
+        uses: joerick/cibuildwheel@v2.4.0
         if: matrix.platform == 'manylinux_aarch64'
         env:
           CIBW_ARCHS_LINUX: aarch64
@@ -72,7 +77,7 @@ jobs:
           python-version: "3.8"
 
       - name: Build wheels
-        uses: joerick/cibuildwheel@v2.3.1
+        uses: joerick/cibuildwheel@v2.4.0
 
         #env:
         #  CIBW_ARCHS_MACOS: x86_64 universal2 # for Apple Silicon
