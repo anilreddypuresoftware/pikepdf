@@ -37,7 +37,7 @@ jobs:
         
         SDIST_EXPANDED=$(echo -n $SDIST)
         python -m pip install --upgrade pip
-        python -m pip install ${SDIST_EXPANDED}
+        
         python -m pytest -nauto
 
   armv64_job:
