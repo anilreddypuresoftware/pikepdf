@@ -10,28 +10,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.7
+    - name: Set up Python 3.8
       uses: actions/setup-python@v3
       with:
-        python-version: 3.7 
+        python-version:  3.8
     - name: Add conda to system path
       run: |
         # $CONDA is an environment variable pointing to the root of the miniconda directory
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install dependencies
       run: |
-        conda create -q -y --name testenv python=3.7 cython numpy pytest psutil pip
+        conda create -q -y --name testenv jbig2dec lcov python=3.8 cython numpy pytest psutil pip
         conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls
     
     - name: Test with pytest
       run: |
         conda install pytest
-        apt-get update
-        apt-get install -y jbig2dec lcov
         python -m pip install tomli
         python build-scripts/environ-from-pyproject.py
         build-scripts/linux-download-qpdf.bash $QPDF_MIN_VERSION
-        echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/local-lib.conf
         build-scripts/linux-build-sdist-deps.bash
         python -m pip install --upgrade pip
         python -m pip install --upgrade setuptools wheel build
@@ -61,7 +58,6 @@ jobs:
               python -m pip install tomli && \
               python build-scripts/environ-from-pyproject.py && \
               build-scripts/linux-download-qpdf.bash $QPDF_MIN_VERSION && \
-              echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/local-lib.conf && \
               build-scripts/linux-build-sdist-deps.bash && \
               python -m pip install --upgrade pip && \
               python -m pip install --upgrade setuptools wheel build && \
