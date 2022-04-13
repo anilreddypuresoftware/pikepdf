@@ -10,10 +10,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.7
+    - name: Set up Python [3.7 , 3.8]
       uses: actions/setup-python@v3
       with:
-        python-version: 3.7
+        python-version: (3.7 , 3.8 )
     - name: Add conda to system path
       run: |
         # $CONDA is an environment variable pointing to the root of the miniconda directory
@@ -26,10 +26,23 @@ jobs:
     - name: Test with pytest
       run: |
         conda install pytest
-        pip install pybind11
-        python setup.py install
-        pip install pikepdf
-        python -n auto
+        apt-get update
+        apt-get install -y jbig2dec lcov
+        python -m pip install tomli
+        python build-scripts/environ-from-pyproject.py
+        build-scripts/linux-download-qpdf.bash $QPDF_MIN_VERSION
+        echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/local-lib.conf
+        build-scripts/linux-build-sdist-deps.bash
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade setuptools wheel build
+        python -m build --sdist
+        python -m venv v
+        source v/bin/activate
+        SDIST=dist/*.tar.gz
+        SDIST_EXPANDED=$(echo -n $SDIST)
+        python -m pip install ${SDIST_EXPANDED}[test]  
+        python -m pytest -nauto
+
   armv64_job:
       name: Build and Test for arm64
       runs-on: ubuntu-20.04
@@ -42,11 +55,21 @@ jobs:
           run: |
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
               arm64v8/ubuntu:20.04 \
-              bash -exc 'apt-get update && apt-get -y install git python3 python3-pip python3-venv curl && \
+              bash -exc 'apt-get update && apt-get -y install jbig2dec lcov git python3 python3-pip python3-venv curl && \
               python3 -m pip install virtualenv && python3 -m venv py37-venv && \
               source py37-venv/bin/activate && \
-              pip install pybind11 && \
-              python setup.py install && \
-              pip install pikepdf && \
-              python -n auto && \
+              python -m pip install tomli && \
+              python build-scripts/environ-from-pyproject.py && \
+              build-scripts/linux-download-qpdf.bash $QPDF_MIN_VERSION && \
+              echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/local-lib.conf && \
+              build-scripts/linux-build-sdist-deps.bash && \
+              python -m pip install --upgrade pip && \
+              python -m pip install --upgrade setuptools wheel build && \
+              python -m build --sdist && \
+              python -m venv v && \
+              source v/bin/activate && \
+              SDIST=dist/*.tar.gz && \
+              SDIST_EXPANDED=$(echo -n $SDIST) && \
+              python -m pip install ${SDIST_EXPANDED}[test]  && \
+              python -m pytest -nauto && \
               deactivate'
