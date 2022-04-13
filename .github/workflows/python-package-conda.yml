@@ -69,8 +69,9 @@ jobs:
             
               SDIST_EXPANDED=$(echo -n $SDIST) && \
               python -m pip install --upgrade pip  && \
-              pip install pikepdf && \
+              
               pip install hypothesis && \
+              pip install PIL && \
               pip install psutil && \
               pip install pytest && \
               python -m pytest  && \
