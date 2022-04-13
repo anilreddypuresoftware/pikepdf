@@ -42,7 +42,7 @@ jobs:
       
         pip install psutil
         pip install pytest
-        python -m pytest 
+        python -m pytest -nauto
 
   armv64_job:
       name: Build and Test for arm64
@@ -74,5 +74,5 @@ jobs:
             
               pip install psutil && \
               pip install pytest && \
-              python -m pytest  && \
+              python -m pytest -nauto && \
               deactivate'
