@@ -27,7 +27,7 @@ jobs:
       run: |
         conda install pytest
         pip install pybind11
-      
+        python setup.py install
         pip install pikepdf
         python -n auto
   armv64_job:
@@ -46,7 +46,7 @@ jobs:
               python3 -m pip install virtualenv && python3 -m venv py38-venv && \
               source py38-venv/bin/activate && \
               pip install pybind11 && \
-              
+              python setup.py install && \
               pip install pikepdf && \
               python -n auto && \
               deactivate'
