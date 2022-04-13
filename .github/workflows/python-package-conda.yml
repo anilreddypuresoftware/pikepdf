@@ -38,7 +38,7 @@ jobs:
         SDIST_EXPANDED=$(echo -n $SDIST)
         python -m pip install --upgrade pip
         pip install pytest
-        python -m pytest -nauto
+        python -m pytest 
 
   armv64_job:
       name: Build and Test for arm64
@@ -59,12 +59,12 @@ jobs:
               python build-scripts/environ-from-pyproject.py && \
               python -m pip install --upgrade pip && \
               python -m pip install --upgrade setuptools wheel build && \
-              python -m build --sdist && \
+            
               python -m venv v && \
               source v/bin/activate && \
             
               SDIST_EXPANDED=$(echo -n $SDIST) && \
               python -m pip install --upgrade pip  && \
               pip install pytest && \
-              python -m pytest -nauto && \
+              python -m pytest  && \
               deactivate'
