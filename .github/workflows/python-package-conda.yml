@@ -37,7 +37,7 @@ jobs:
         
         SDIST_EXPANDED=$(echo -n $SDIST)
         python -m pip install --upgrade pip
-        
+        pip install pytest
         python -m pytest -nauto
 
   armv64_job:
@@ -57,15 +57,14 @@ jobs:
               source py37-venv/bin/activate && \
               python -m pip install tomli && \
               python build-scripts/environ-from-pyproject.py && \
-              build-scripts/linux-download-qpdf.bash $QPDF_MIN_VERSION && \
-              build-scripts/linux-build-sdist-deps.bash && \
               python -m pip install --upgrade pip && \
               python -m pip install --upgrade setuptools wheel build && \
               python -m build --sdist && \
               python -m venv v && \
               source v/bin/activate && \
-              SDIST=dist/*.tar.gz && \
+            
               SDIST_EXPANDED=$(echo -n $SDIST) && \
-              python -m pip install ${SDIST_EXPANDED}[test]  && \
+              python -m pip install --upgrade pip  && \
+              pip install pytest && \
               python -m pytest -nauto && \
               deactivate'
