@@ -71,8 +71,9 @@ jobs:
               python -m pip install --upgrade pip  && \
               
               pip install hypothesis && \
-            
+              pip install lxml && \
               pip install psutil && \
               pip install pytest && \
+              pip install pikepdf && \
               python -m pytest  && \
               deactivate'
