@@ -3,13 +3,13 @@ set -ex
 
 if [ ! -f /usr/local/lib/libz.a ]; then
     pushd zlib
-    ./configure && make -j install
+    ./configure && make  install
     popd
 fi
 
 if [ ! -f  /usr/local/lib/libjpeg.a ]; then
     pushd jpeg
-    ./configure && make -j install
+    ./configure && make  install
     popd
 fi
 
