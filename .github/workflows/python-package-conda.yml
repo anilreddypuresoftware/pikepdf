@@ -61,7 +61,7 @@ jobs:
               source py38-venv/bin/activate && \
               
               
-              
+              pip install pybind11 && \
               python setup.py install && \
               python -m pip install tomli && \
               python build-scripts/environ-from-pyproject.py && \
