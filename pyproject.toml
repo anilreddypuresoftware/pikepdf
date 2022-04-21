@@ -91,7 +91,7 @@ skip = "pp3*"
 minversion = "6.0"
 norecursedirs = ["lib", ".pc", ".git", "venv"]
 testpaths = ["tests"]
-addopts = "-n auto"
+
 
 [tool.coverage.run]
 concurrency = ["multiprocessing"]
